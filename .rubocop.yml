@@ -1,0 +1,102 @@
+# Normally additional configs of AllCops/Include and AllCops/Exclude override to RuboCops's defaults.
+# But you'd like to apply both RuboCops's defaults and addtional configs of AllCops/Include and AllCops/Exclude.
+# ref: https://docs.rubocop.org/en/stable/configuration/#unusual-files-that-would-not-be-included-by-default
+inherit_mode:
+  merge:
+    - Include
+    - Exclude
+
+AllCops:
+  TargetRubyVersion: 3.3
+  Exclude:
+    - 'Gemfile'
+    - 'bin/*'
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'deploy/**/*'
+
+# Accept single-line methods with no body
+Style/SingleLineMethods:
+  AllowIfMethodIsEmpty: true
+
+# Top-level documentation of classes and modules are needless
+Style/Documentation:
+  Enabled: false
+
+# Allow to chain of block after another block that spans multiple lines
+Style/MultilineBlockChain:
+  Enabled: false
+
+# Allow `->` literal for multi line blocks
+Style/Lambda:
+  Enabled: false
+
+# Both nested and compact are okay
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+# Specifying param names is unnecessary
+Style/SingleLineBlockParams:
+  Enabled: false
+
+# Prefer Kernel#sprintf
+Style/FormatString:
+  EnforcedStyle: sprintf
+
+# Maximum method length
+Metrics/MethodLength:
+  Max: 20
+
+# Tune to MethodLength
+Metrics/AbcSize:
+  Max: 30
+
+# Tune to MethodLength
+Metrics/ClassLength:
+  Max: 200
+
+# Maximum line length
+Layout/LineLength:
+  Max: 100
+
+# Allow `has_` as prefix of predicate methods
+Naming/PredicateName:
+  ForbiddenPrefixes:
+    - is_
+    - have_
+
+# Prefer double_quotes strings unless your string literal contains escape chars
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Prefer raise over fail for exceptions
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+# Allow empty condition in case statements
+Style/EmptyCaseCondition:
+  Enabled: false
+
+# Prefer trailing comma in argument lists
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+# Prefer trailing comma in array literals
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+# Prefer trailing comma in hash literals
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+# Prefer parentheses for almost all percent literals
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '()'
+    '%I': '()'
+    '%w': '()'
+    '%W': '()'
+
+# Prefer `has_?` style for Hash methods
+Style/PreferredHashMethods:
+  EnforcedStyle: verbose
