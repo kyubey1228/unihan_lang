@@ -43,6 +43,7 @@ module UnihanLang
     private
 
     # テキストの言語比率を計算し、最も可能性の高い言語を返す
+    # rubocop:disable Metrics/CyclomaticComplexity
     def language_ratio(text)
       return :ja if ja?(text)
 
@@ -50,11 +51,12 @@ module UnihanLang
       cn_chars = text.chars.count { |char| @chinese_processor.zh_cn?(char) }
       chinese_chars = text.chars.count { |char| @chinese_processor.chinese?(char) }
 
-      return unless chinese_chars == text.length
+      return :unknown unless chinese_chars == text.length
       return :tw if tw_chars > cn_chars
       return :cn if cn_chars >= tw_chars
 
       :unknown
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
   end
 end
