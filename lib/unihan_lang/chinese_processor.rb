@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UnihanLang
   class ChineseProcessor
     attr_reader :zh_tw, :zh_cn, :common
@@ -38,30 +40,32 @@ module UnihanLang
     end
 
     def load_unihan_variants
-      file_path = File.join(File.dirname(__FILE__), '..', '..', 'data', 'Unihan_Variants.txt')
-      File.foreach(file_path, encoding: 'UTF-8') do |line|
-        next if line.start_with?('#') || line.strip.empty?
+      file_path = File.join(File.dirname(__FILE__), "..", "..", "data", "Unihan_Variants.txt")
+      File.foreach(file_path, encoding: "UTF-8") do |line|
+        next if line.start_with?("#") || line.strip.empty?
+
         fields = line.strip.split("\t")
         process_unihan_fields(fields) if fields.size >= 3
       end
     end
 
     def process_unihan_fields(fields)
-      char = [fields[0].gsub(/^U\+/, '').hex].pack('U')
-      variant = [fields[2].split('<')[0].gsub(/^U\+/, '').hex].pack('U')
+      char = [fields[0].gsub(/^U\+/, "").hex].pack("U")
+      variant = [fields[2].split("<")[0].gsub(/^U\+/, "").hex].pack("U")
       case fields[1]
-      when 'kTraditionalVariant'
+      when "kTraditionalVariant"
         @zh_tw << variant
         @zh_cn << char
-      when 'kSimplifiedVariant'
+      when "kSimplifiedVariant"
         @zh_cn << variant
         @zh_tw << char
       end
     end
 
     def load_traditional_chinese_list
-      file_path = File.join(File.dirname(__FILE__), '..', '..', 'data', 'traditional_chinese_list.txt')
-      File.foreach(file_path, encoding: 'UTF-8') { |line| @zh_tw << line.strip }
+      file_path = File.join(File.dirname(__FILE__), "..", "..", "data",
+                            "traditional_chinese_list.txt")
+      File.foreach(file_path, encoding: "UTF-8") { |line| @zh_tw << line.strip }
     end
 
     def process_character_sets

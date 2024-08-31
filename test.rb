@@ -1,28 +1,30 @@
-$LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
-require 'unihan_lang'
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift File.expand_path("lib", __dir__)
+require "unihan_lang"
 
 unihan = UnihanLang::Unihan.new
 
-test_cases = [
-  "繁體字",
-  "简体字",
-  "日本語",
-  "中文",
-  "漢字",
-  "汉字",
-  "東京",
-  "北京",
-  "台北",
-  "ひらがな",
-  "カタカナ",
-  "漢字とひらがな",
-  "こんにちは世界",
-  "你好世界",
-  "你好世界",
-  "實際的例子",
-  "实际的例子",
-  "現実の例"
-]
+test_cases = %w(
+  繁體字
+  简体字
+  日本語
+  中文
+  漢字
+  汉字
+  東京
+  北京
+  台北
+  ひらがな
+  カタカナ
+  漢字とひらがな
+  こんにちは世界
+  你好世界
+  你好世界
+  實際的例子
+  实际的例子
+  現実の例
+)
 
 test_cases.each do |word|
   puts "\nTesting '#{word}':"
@@ -47,7 +49,9 @@ test_cases.each do |word|
     print "Chinese " if is_chinese
     print "Japanese " if is_japanese
     print "KANA " if is_kana
-    print "UNKNOWN" if !in_zh_tw && !in_zh_cn && !in_common && !is_chinese && !is_japanese && !is_kana
+    if !in_zh_tw && !in_zh_cn && !in_common && !is_chinese && !is_japanese && !is_kana
+      print "UNKNOWN"
+    end
     puts
   end
 end

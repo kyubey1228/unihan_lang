@@ -1,7 +1,8 @@
-require 'set'
-require_relative 'unihan_lang/version'
-require_relative 'unihan_lang/japanese_processor'
-require_relative 'unihan_lang/chinese_processor'
+# frozen_string_literal: true
+
+require_relative "unihan_lang/version"
+require_relative "unihan_lang/japanese_processor"
+require_relative "unihan_lang/chinese_processor"
 
 module UnihanLang
   class Unihan
@@ -32,10 +33,10 @@ module UnihanLang
 
     def determine_language(text)
       case language_ratio(text)
-      when :ja then 'JA'
-      when :tw then 'ZH_TW'
-      when :cn then 'ZH_CN'
-      else 'Unknown'
+      when :ja then "JA"
+      when :tw then "ZH_TW"
+      when :cn then "ZH_CN"
+      else "Unknown"
       end
     end
 
