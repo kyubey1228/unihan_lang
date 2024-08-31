@@ -19,17 +19,17 @@ module UnihanLang
       @zh_cn.include?(char) || @common.include?(char)
     end
 
-    def is_chinese?(char)
-      zh_tw?(char) || zh_cn?(char) || is_cjk?(char)
+    def chinese?(char)
+      zh_tw?(char) || zh_cn?(char) || cjk?(char)
     end
 
     def chinese_character?(char)
-      is_chinese?(char)
+      chinese?(char)
     end
 
     private
 
-    def is_cjk?(char)
+    def cjk?(char)
       char.ord >= 0x4E00 && char.ord <= 0x9FFF
     end
 

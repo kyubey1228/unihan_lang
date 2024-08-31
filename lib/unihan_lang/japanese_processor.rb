@@ -8,7 +8,7 @@ module UnihanLang
       @natto = Natto::MeCab.new
     end
 
-    def is_japanese?(text)
+    def japanese?(text)
       return true if text.match?(/[\p{Hiragana}\p{Katakana}ー]/)
 
       tokens = tokenize(text)

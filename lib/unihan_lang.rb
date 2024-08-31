@@ -12,7 +12,7 @@ module UnihanLang
     end
 
     def ja?(text)
-      @japanese_processor.is_japanese?(text)
+      @japanese_processor.japanese?(text)
     end
 
     def zh_tw?(text)
@@ -48,7 +48,7 @@ module UnihanLang
 
       tw_chars = text.chars.count { |char| @chinese_processor.zh_tw?(char) }
       cn_chars = text.chars.count { |char| @chinese_processor.zh_cn?(char) }
-      chinese_chars = text.chars.count { |char| @chinese_processor.is_chinese?(char) }
+      chinese_chars = text.chars.count { |char| @chinese_processor.chinese?(char) }
 
       return unless chinese_chars == text.length
       return :tw if tw_chars > cn_chars

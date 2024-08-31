@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Layout/LineLength, Gemspec/RequiredRubyVersion
 require_relative "lib/unihan_lang/version"
 
 Gem::Specification.new do |spec|
@@ -26,3 +27,4 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end + Dir["data/*"]
 end
+# rubocop:enable all

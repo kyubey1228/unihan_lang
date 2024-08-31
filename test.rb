@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# rubocop:disable all
 $LOAD_PATH.unshift File.expand_path("lib", __dir__)
 require "unihan_lang"
 
@@ -40,8 +40,8 @@ test_cases.each do |word|
     in_zh_tw = chinese_processor.zh_tw.include?(char)
     in_zh_cn = chinese_processor.zh_cn.include?(char)
     in_common = chinese_processor.common.include?(char)
-    is_chinese = chinese_processor.is_chinese?(char)
-    is_japanese = japanese_processor.is_japanese?(char.to_s)
+    is_chinese = chinese_processor.chinese?(char)
+    is_japanese = japanese_processor.japanese?(char.to_s)
     is_kana = char =~ /[\p{Hiragana}\p{Katakana}ー]/
     print "ZH_TW " if in_zh_tw
     print "ZH_CN " if in_zh_cn
@@ -55,3 +55,4 @@ test_cases.each do |word|
     puts
   end
 end
+# rubocop:enable all
