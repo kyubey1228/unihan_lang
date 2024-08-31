@@ -50,17 +50,11 @@ module UnihanLang
       cn_chars = text.chars.count { |char| @chinese_processor.zh_cn?(char) }
       chinese_chars = text.chars.count { |char| @chinese_processor.is_chinese?(char) }
 
-      if chinese_chars == text.length
-        if tw_chars > cn_chars
-          :tw
-        elsif cn_chars >= tw_chars
-          :cn
-        else
-          :unknown
-        end
-      else
-        :unknown
-      end
+      return unless chinese_chars == text.length
+      return :tw if tw_chars > cn_chars
+      return :cn if cn_chars >= tw_chars
+
+      :unknown
     end
   end
 end
