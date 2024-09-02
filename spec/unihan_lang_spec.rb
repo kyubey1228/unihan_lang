@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe UnihanLang::Unihan do
@@ -45,7 +47,7 @@ RSpec.describe UnihanLang::Unihan do
 
   describe '#extract_chinese_characters' do
     it '混合テキストから中国語の文字を抽出する' do
-      expect(unihan.extract_chinese_characters('This text contains 中文')).to eq(['中', '文'])
+      expect(unihan.extract_chinese_characters('This text contains 中文')).to eq(%w[中 文])
     end
 
     it '中国語の文字を含まないテキストに対して空の配列を返す' do

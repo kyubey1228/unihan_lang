@@ -8,3 +8,4 @@ Gemfile.lock
 /log/
 /tmp/
 .DS_Store
+.rubocop-http*
