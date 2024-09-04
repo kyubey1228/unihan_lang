@@ -1,3 +1,5 @@
+<!-- @format -->
+
 # UnihanLang
 
 UnihanLang は、テキストの言語（日本語、繁体字中国語、簡体字中国語）を識別するための Ruby ライブラリです。
@@ -30,13 +32,8 @@ require 'unihan_lang'
 unihan = UnihanLang::Unihan.new
 
 # 言語の判定
-puts unihan.determine_language("これは日本語です")  # => "JA"
 puts unihan.determine_language("這是繁體中文")      # => "ZH_TW"
 puts unihan.determine_language("这是简体中文")      # => "ZH_CN"
-
-# 日本語かどうかの判定
-puts unihan.ja?("これは日本語です")  # => true
-puts unihan.ja?("这不是日语")        # => false
 
 # 繁体字中国語かどうかの判定
 puts unihan.zh_tw?("這是繁體中文")  # => true
@@ -58,7 +55,3 @@ puts unihan.extract_chinese_characters("This text contains 中文").join  # => "
 
 このライブラリは、テキストの言語を完全に正確に判定することを保証するものではありません。
 特に、短いテキストや複数の言語が混在するテキストの場合、判定が難しい場合があります。
-
-### 例えば
-
-`東京` や `日本語` といった単語は日本語と判定されないため誰か直してください。
