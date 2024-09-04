@@ -1,18 +1,12 @@
 # frozen_string_literal: true
 
 require_relative "unihan_lang/version"
-require_relative "unihan_lang/japanese_processor"
 require_relative "unihan_lang/chinese_processor"
 
 module UnihanLang
   class Unihan
     def initialize
       @chinese_processor = ChineseProcessor.new
-      @japanese_processor = JapaneseProcessor.new
-    end
-
-    def ja?(text)
-      @japanese_processor.japanese?(text)
     end
 
     def zh_tw?(text)
@@ -43,10 +37,7 @@ module UnihanLang
     private
 
     # テキストの言語比率を計算し、最も可能性の高い言語を返す
-    # rubocop:disable Metrics/CyclomaticComplexity
     def language_ratio(text)
-      return :ja if ja?(text)
-
       tw_chars = text.chars.count { |char| @chinese_processor.zh_tw?(char) }
       cn_chars = text.chars.count { |char| @chinese_processor.zh_cn?(char) }
       chinese_chars = text.chars.count { |char| @chinese_processor.chinese?(char) }
@@ -57,6 +48,5 @@ module UnihanLang
 
       :unknown
     end
-    # rubocop:enable Metrics/CyclomaticComplexity
   end
 end
