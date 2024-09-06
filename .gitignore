@@ -4,7 +4,7 @@
 *.gem
 .ruby-version
 .ruby-gemset
-Gemfile.lock
 /log/
 /tmp/
 .DS_Store
+.rubocop-http*
