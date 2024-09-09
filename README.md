@@ -2,7 +2,7 @@
 
 # UnihanLang
 
-UnihanLang は、テキストの言語（日本語、繁体字中国語、簡体字中国語）を識別するための Ruby ライブラリです。
+UnihanLang は、テキストの言語（繁体字中国語、簡体字中国語）を識別し、中国語の文字に関する様々な判定を行うための Ruby ライブラリです。
 
 ## インストール
 
@@ -49,7 +49,35 @@ puts unihan.contains_chinese?("This text has no Chinese")  # => false
 
 # テキストから中国語の文字を抽出
 puts unihan.extract_chinese_characters("This text contains 中文").join  # => "中文"
+
+# 繁体字のみで構成されているかの判定
+puts unihan.only_zh_tw?("繁體")  # => true
+puts unihan.only_zh_tw?("繁體简体")  # => false
+
+# 簡体字のみで構成されているかの判定
+puts unihan.only_zh_cn?("简体")  # => true
+puts unihan.only_zh_cn?("简体繁體")  # => false
+
+# 繁体字を含むかどうかの判定
+puts unihan.contains_zh_tw?("這個text包含繁體字")  # => true
+puts unihan.contains_zh_tw?("这个text不包含繁体字")  # => false
+
+# 簡体字を含むかどうかの判定
+puts unihan.contains_zh_cn?("这个text包含简体字")  # => true
+puts unihan.contains_zh_cn?("這個text不包含簡體字")  # => false
 ```
+
+## 機能説明
+
+- `determine_language(text)`: テキストの言語を判定します（"ZH_TW", "ZH_CN", "Unknown"）。
+- `zh_tw?(text)`: テキストが繁体字中国語かどうかを判定します。
+- `zh_cn?(text)`: テキストが簡体字中国語かどうかを判定します。
+- `contains_chinese?(text)`: テキストに中国語の文字が含まれているかを判定します。
+- `extract_chinese_characters(text)`: テキストから中国語の文字を抽出します。
+- `only_zh_tw?(text)`: テキストが繁体字のみで構成されているかを判定します。
+- `only_zh_cn?(text)`: テキストが簡体字のみで構成されているかを判定します。
+- `contains_zh_tw?(text)`: テキストに繁体字が含まれているかを判定します。
+- `contains_zh_cn?(text)`: テキストに簡体字が含まれているかを判定します。
 
 ## 注意事項
 
