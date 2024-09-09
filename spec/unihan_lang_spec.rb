@@ -58,4 +58,57 @@ RSpec.describe UnihanLang::Unihan do
       expect(unihan.determine_language('This is English')).to eq('Unknown')
     end
   end
+
+  # 新しい機能のテスト
+  describe '#only_zh_tw?' do
+    it '繁体字のみで構成されたテキストに対してtrueを返す' do
+      expect(unihan.only_zh_tw?('繁體')).to be true
+    end
+
+    it '簡体字を含むテキストに対してfalseを返す' do
+      expect(unihan.only_zh_tw?('繁體简体')).to be false
+    end
+
+    it '共通の字を含むテキストに対してfalseを返す' do
+      expect(unihan.only_zh_tw?('繁體中文')).to be false
+    end
+  end
+
+  describe '#only_zh_cn?' do
+    it '簡体字のみで構成されたテキストに対してtrueを返す' do
+      expect(unihan.only_zh_cn?('简体')).to be true
+    end
+
+    it '繁体字を含むテキストに対してfalseを返す' do
+      expect(unihan.only_zh_cn?('简体繁體')).to be false
+    end
+
+    it '共通の字を含むテキストに対してfalseを返す' do
+      expect(unihan.only_zh_cn?('简体中文')).to be false
+    end
+  end
+
+  describe '#contains_zh_tw?' do
+    it '繁体字を含むテキストに対してtrueを返す' do
+      expect(unihan.contains_zh_tw?('這個text包含繁體字')).to be true
+    end
+
+    it '繁体字を含まないテキストに対してfalseを返す' do
+      expect(unihan.contains_zh_tw?('这个text不包含简体字')).to be false
+    end
+
+    it '共通の漢字のみを含むテキストに対してfalseを返す' do
+      expect(unihan.contains_zh_tw?('中文')).to be false
+    end
+  end
+
+  describe '#contains_zh_cn?' do
+    it '簡体字を含むテキストに対してtrueを返す' do
+      expect(unihan.contains_zh_cn?('这个text包含简体字')).to be true
+    end
+
+    it '簡体字を含まないテキストに対してfalseを返す' do
+      expect(unihan.contains_zh_cn?('這個text不包含簡體字')).to be false
+    end
+  end
 end
