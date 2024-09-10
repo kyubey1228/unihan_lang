@@ -19,6 +19,14 @@ module UnihanLang
       @zh_cn.include?(char) || @common.include?(char)
     end
 
+    def only_zh_tw?(char)
+      @zh_tw.include?(char) && !@common.include?(char)
+    end
+
+    def only_zh_cn?(char)
+      @zh_cn.include?(char)
+    end
+
     def chinese?(char)
       zh_tw?(char) || zh_cn?(char) || cjk?(char)
     end
