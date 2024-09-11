@@ -1,18 +1,12 @@
 # frozen_string_literal: true
 
 require_relative "unihan_lang/version"
-require_relative "unihan_lang/japanese_processor"
 require_relative "unihan_lang/chinese_processor"
 
 module UnihanLang
   class Unihan
     def initialize
       @chinese_processor = ChineseProcessor.new
-      @japanese_processor = JapaneseProcessor.new
-    end
-
-    def ja?(text)
-      @japanese_processor.japanese?(text)
     end
 
     def zh_tw?(text)
@@ -21,6 +15,22 @@ module UnihanLang
 
     def zh_cn?(text)
       language_ratio(text) == :cn
+    end
+
+    def only_zh_tw?(text)
+      text.chars.all? { |char| @chinese_processor.only_zh_tw?(char) }
+    end
+
+    def only_zh_cn?(text)
+      text.chars.all? { |char| @chinese_processor.only_zh_cn?(char) }
+    end
+
+    def contains_zh_tw?(text)
+      text.chars.any? { |char| @chinese_processor.only_zh_tw?(char) }
+    end
+
+    def contains_zh_cn?(text)
+      text.chars.any? { |char| @chinese_processor.only_zh_cn?(char) }
     end
 
     def contains_chinese?(text)
@@ -33,7 +43,6 @@ module UnihanLang
 
     def determine_language(text)
       case language_ratio(text)
-      when :ja then "JA"
       when :tw then "ZH_TW"
       when :cn then "ZH_CN"
       else "Unknown"
@@ -43,20 +52,16 @@ module UnihanLang
     private
 
     # テキストの言語比率を計算し、最も可能性の高い言語を返す
-    # rubocop:disable Metrics/CyclomaticComplexity
     def language_ratio(text)
-      return :ja if ja?(text)
-
-      tw_chars = text.chars.count { |char| @chinese_processor.zh_tw?(char) }
-      cn_chars = text.chars.count { |char| @chinese_processor.zh_cn?(char) }
+      only_tw_chars = text.chars.count { |char| @chinese_processor.only_zh_tw?(char) }
+      only_cn_chars = text.chars.count { |char| @chinese_processor.only_zh_cn?(char) }
       chinese_chars = text.chars.count { |char| @chinese_processor.chinese?(char) }
 
       return :unknown unless chinese_chars == text.length
-      return :tw if tw_chars > cn_chars
-      return :cn if cn_chars >= tw_chars
+      return :tw if only_tw_chars > only_cn_chars
+      return :cn if only_cn_chars >= only_tw_chars
 
       :unknown
     end
-    # rubocop:enable Metrics/CyclomaticComplexity
   end
 end
