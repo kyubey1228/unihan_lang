@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["kyubey1228"]
   spec.email         = ["kyuuka1228@gmail.com"]
 
-  spec.summary       = "Language detection for Chinese and Japanese characters"
-  spec.description   = "A gem to detect and differentiate between Traditional Chinese, Simplified Chinese, and Japanese characters based on Unihan data."
+  spec.summary       = "Language detection for Chinese characters"
+  spec.description   = "A gem to detect and differentiate between Traditional Chinese, Simplified Chinese based on Unihan data."
   spec.homepage      = "https://github.com/kyubey1228/unihan_lang"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
