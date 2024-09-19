@@ -43,7 +43,6 @@ module UnihanLang
 
     def load_chinese_characters
       load_unihan_variants
-      load_traditional_chinese_list
       process_character_sets
     end
 
@@ -72,17 +71,14 @@ module UnihanLang
       end
     end
 
-    def load_traditional_chinese_list
-      file_path = File.join(File.dirname(__FILE__), "..", "..", "data",
-                            "traditional_chinese_list.txt")
-      File.foreach(file_path, encoding: "UTF-8") { |line| @zh_tw << line.strip }
-    end
-
     def process_character_sets
+      # There are same code point both zh_tw and zh_cn in Unihan_Variants.txt.
+      # Example: 台(U+53F0)
+      # U+53F0	kSimplifiedVariant	U+53F0
+      # U+53F0	kTraditionalVariant	U+53F0 U+6AAF U+81FA U+98B1
       @common = @zh_tw & @zh_cn
-      @zh_tw -= @zh_cn
-      @zh_cn -= @zh_tw
-      @zh_cn |= @common
+      @zh_tw -= @common
+      @zh_cn -= @common
     end
   end
 end

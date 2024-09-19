@@ -59,10 +59,10 @@ RSpec.describe UnihanLang::Unihan do
     end
   end
 
-  # 新しい機能のテスト
   describe '#only_zh_tw?' do
     it '繁体字のみで構成されたテキストに対してtrueを返す' do
-      expect(unihan.only_zh_tw?('繁體')).to be true
+      # U+9AD4	kSimplifiedVariant	U+4F53
+      expect(unihan.only_zh_tw?('體')).to be true
     end
 
     it '簡体字を含むテキストに対してfalseを返す' do
@@ -72,11 +72,18 @@ RSpec.describe UnihanLang::Unihan do
     it '共通の字を含むテキストに対してfalseを返す' do
       expect(unihan.only_zh_tw?('繁體中文')).to be false
     end
+
+    it 'has same code point both zh_tw and zh_cn in Unihan_Variants.txt returns false' do
+      # U+53F0	kSimplifiedVariant	U+53F0
+      # U+53F0	kTraditionalVariant	U+53F0 U+6AAF U+81FA U+98B1
+      expect(unihan.only_zh_tw?('台')).to be false
+    end
   end
 
   describe '#only_zh_cn?' do
     it '簡体字のみで構成されたテキストに対してtrueを返す' do
-      expect(unihan.only_zh_cn?('简体')).to be true
+      # U+3437	kTraditionalVariant	U+508C
+      expect(unihan.only_zh_cn?('㐷')).to be true
     end
 
     it '繁体字を含むテキストに対してfalseを返す' do
@@ -85,6 +92,12 @@ RSpec.describe UnihanLang::Unihan do
 
     it '共通の字を含むテキストに対してfalseを返す' do
       expect(unihan.only_zh_cn?('简体中文')).to be false
+    end
+
+    it 'has same code point both zh_tw and zh_cn Unihan_Variants.txt returns false' do
+      # U+53F0	kSimplifiedVariant	U+53F0
+      # U+53F0	kTraditionalVariant	U+53F0 U+6AAF U+81FA U+98B1
+      expect(unihan.only_zh_cn?('台')).to be false
     end
   end
 
