@@ -73,7 +73,7 @@ RSpec.describe UnihanLang::Unihan do
       expect(unihan.only_zh_tw?('繁體中文')).to be false
     end
 
-    it 'has same code point both zh_tw and zh_cn in Unihan_Variants.txt returns false' do
+    it 'same codes point both zh_tw and zh_cn in Unihan_Variants.txt returns false' do
       # U+53F0	kSimplifiedVariant	U+53F0
       # U+53F0	kTraditionalVariant	U+53F0 U+6AAF U+81FA U+98B1
       expect(unihan.only_zh_tw?('台')).to be false
@@ -94,7 +94,7 @@ RSpec.describe UnihanLang::Unihan do
       expect(unihan.only_zh_cn?('简体中文')).to be false
     end
 
-    it 'has same code point both zh_tw and zh_cn Unihan_Variants.txt returns false' do
+    it 'same code points both zh_tw and zh_cn in Unihan_Variants.txt returns false' do
       # U+53F0	kSimplifiedVariant	U+53F0
       # U+53F0	kTraditionalVariant	U+53F0 U+6AAF U+81FA U+98B1
       expect(unihan.only_zh_cn?('台')).to be false
