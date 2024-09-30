@@ -57,17 +57,17 @@ module UnihanLang
     end
 
     def process_unihan_fields(fields)
-      char = [fields[0].gsub(/^U\+/, "").hex].pack("U")
+      from = [fields[0].gsub(/^U\+/, "").hex].pack("U")
       # Remove dictionary name.
       # Example: U+348B kSemanticVariant U+5EDD<kMatthews U+53AE<kMatthews
-      variant = [fields[2].split("<")[0].gsub(/^U\+/, "").hex].pack("U")
+      to = [fields[2].split("<")[0].gsub(/^U\+/, "").hex].pack("U")
       case fields[1]
       when "kTraditionalVariant"
-        @zh_tw << variant
-        @zh_cn << char
+        @zh_cn << from
+        @zh_tw << to
       when "kSimplifiedVariant"
-        @zh_cn << variant
-        @zh_tw << char
+        @zh_tw << from
+        @zh_cn << to
       end
     end
 
