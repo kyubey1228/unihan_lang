@@ -18,6 +18,7 @@ git commit -am "Bump version $VERSION"
 
 # Publish to rubygems
 gem build unihan_lang.gemspec
+bundle install
 gem push unihan_lang-$VERSION.gem
 
 # GitHub release
