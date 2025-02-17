@@ -3,6 +3,7 @@
 require_relative "unihan_lang/version"
 require_relative "unihan_lang/chinese_processor"
 require_relative "unihan_lang/variant_mapping"
+require_relative "unihan_lang/chinese_score_analyzer"
 
 module UnihanLang
   class Unihan
@@ -52,54 +53,24 @@ module UnihanLang
     end
 
     def analyze_with_variants(text)
-      chars = text.chars
-      traditional_score = 0
-      simplified_score = 0
-
-      chars.each do |char|
-        next unless @chinese_processor.chinese_character?(char)
-
-        # 繁体字・簡体字の判定
-        if @chinese_processor.only_zh_tw?(char)
-          traditional_score += 2
-        elsif @chinese_processor.only_zh_cn?(char)
-          simplified_score += 2
-        end
-
-        # 異体字による判定
-        traditional_score += 0.5 if @variant_mapping.traditional_variants(char).any?
-        simplified_score += 0.5 if @variant_mapping.simplified_variants(char).any?
-      end
-
+      analyzer = ChineseScoreAnalyzer.new(text, @chinese_processor, @variant_mapping)
       {
-        traditional_score: traditional_score,
-        simplified_score: simplified_score,
-        total_chinese: chars.count { |c| @chinese_processor.chinese_character?(c) }
+        traditional_score: analyzer.traditional_score,
+        simplified_score: analyzer.simplified_score,
+        total_chinese: analyzer.total_chinese,
       }
     end
 
     def determine_language_with_variants(text)
-      scores = analyze_with_variants(text)
-      return "Unknown" if scores[:total_chinese] == 0
-
-      if scores[:traditional_score] > scores[:simplified_score]
-        "ZH_TW"
-      elsif scores[:simplified_score] > scores[:traditional_score]
-        "ZH_CN"
-      else
-        "Unknown"
-      end
+      analyzer = ChineseScoreAnalyzer.new(text, @chinese_processor, @variant_mapping)
+      analyzer.dominant_language
     end
 
     private
 
-    # テキストの言語比率を計算し、最も可能性の高い言語を返す
     def language_ratio(text)
-      scores = analyze_with_variants(text)
-      return :unknown if scores[:total_chinese] != text.length
-      return :tw if scores[:traditional_score] > scores[:simplified_score]
-      return :cn if scores[:simplified_score] >= scores[:traditional_score]
-      :unknown
+      analyzer = ChineseScoreAnalyzer.new(text, @chinese_processor, @variant_mapping)
+      analyzer.language_ratio
     end
   end
 end
