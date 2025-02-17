@@ -57,21 +57,18 @@ module UnihanLang
       simplified_score = 0
 
       chars.each do |char|
-        if @chinese_processor.chinese_character?(char)
-          if @chinese_processor.only_zh_tw?(char)
-            traditional_score += 2  # 繁体字の重みを増やす
-          elsif @chinese_processor.only_zh_cn?(char)
-            simplified_score += 2  # 簡体字の重みを増やす
-          end
+        next unless @chinese_processor.chinese_character?(char)
 
-          # 異体字による判定の重みを調整
-          if @variant_mapping.traditional_variants(char).any?
-            traditional_score += 0.5
-          end
-          if @variant_mapping.simplified_variants(char).any?
-            simplified_score += 0.5
-          end
+        # 繁体字・簡体字の判定
+        if @chinese_processor.only_zh_tw?(char)
+          traditional_score += 2
+        elsif @chinese_processor.only_zh_cn?(char)
+          simplified_score += 2
         end
+
+        # 異体字による判定
+        traditional_score += 0.5 if @variant_mapping.traditional_variants(char).any?
+        simplified_score += 0.5 if @variant_mapping.simplified_variants(char).any?
       end
 
       {
