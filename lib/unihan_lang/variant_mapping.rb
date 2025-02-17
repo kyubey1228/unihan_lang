@@ -32,14 +32,12 @@ module UnihanLang
         next if line.start_with?("#") || line.strip.empty?
 
         fields = line.strip.split("\t")
-        if fields.size >= 3
-          # kTraditionalVariant フィールドの場合のみ処理
-          if fields[1] == "kTraditionalVariant"
-            simp = [fields[0].gsub(/^U\+/, "").hex].pack("U")
-            trad = [fields[2].gsub(/^U\+/, "").hex].pack("U")
-            traditional_to_simplified[trad] ||= Set.new
-            traditional_to_simplified[trad] << simp
-          end
+        # kTraditionalVariant フィールドの場合のみ処理
+        if fields.size >= 3 && fields[1] == ("kTraditionalVariant")
+          simp = [fields[0].gsub(/^U\+/, "").hex].pack("U")
+          trad = [fields[2].gsub(/^U\+/, "").hex].pack("U")
+          traditional_to_simplified[trad] ||= Set.new
+          traditional_to_simplified[trad] << simp
         end
       end
       traditional_to_simplified
