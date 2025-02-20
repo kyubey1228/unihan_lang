@@ -124,4 +124,63 @@ RSpec.describe UnihanLang::Unihan do
       expect(unihan.contains_zh_cn?('這個text不包含簡體字')).to be false
     end
   end
+
+  describe '#determine_language_with_variants' do
+    context '繁体字の判定精度確認' do
+      it '標準的な繁体字のケース' do
+        expect(unihan.determine_language_with_variants('這是繁體中文的測試')).to eq('ZH_TW')
+      end
+
+      it '異体字を含む繁体字のケース' do
+        # 個別の漢字に対する異体字の例
+        # 発 -> 發, 様 -> 樣, 国 -> 國
+        expect(unihan.determine_language_with_variants('發展樣式國家')).to eq('ZH_TW')
+      end
+
+      it '繁体字に特有の表現を含むケース' do
+        # 裡 (裏), 儘 (尽), 甚麼 (什么) など
+        expect(unihan.determine_language_with_variants('他在裡面做甚麼')).to eq('ZH_TW')
+      end
+
+      it '繁体字と簡体字が混在するが、繁体字が優勢なケース' do
+        # 台/臺 (どちらでも使用), 机/機 (混在)
+        expect(unihan.determine_language_with_variants('在台北的機場裡')).to eq('ZH_TW')
+      end
+    end
+
+    context '共通漢字と特殊ケース' do
+      it '共通漢字が多い場合でも繁体字の特徴を正しく判定' do
+        # 中、日、月などの共通漢字が多い文章
+        expect(unihan.determine_language_with_variants('今天的月亮很圓')).to eq('ZH_TW')
+      end
+
+      it '数字や記号が混ざっている場合' do
+        expect(unihan.determine_language_with_variants('2024年的第一個目標：學習繁體字')).to eq('ZH_TW')
+      end
+
+      it '地名や固有名詞を含むケース' do
+        expect(unihan.determine_language_with_variants('在臺灣學習中文')).to eq('ZH_TW')
+      end
+    end
+
+    context '頻出パターンの検証' do
+      it '教育関連の文章' do
+        expect(unihan.determine_language_with_variants('學生們正在學習數學課程')).to eq('ZH_TW')
+      end
+
+      it 'ビジネス用語を含む文章' do
+        expect(unihan.determine_language_with_variants('公司經營與發展策略')).to eq('ZH_TW')
+      end
+
+      it '日常会話の文章' do
+        expect(unihan.determine_language_with_variants('我們今天要去買東西')).to eq('ZH_TW')
+      end
+    end
+
+    context 'エッジケース' do
+      it '極めて短い文章でも正確に判定' do
+        expect(unihan.determine_language_with_variants('臺')).to eq('ZH_TW')
+      end
+    end
+  end
 end

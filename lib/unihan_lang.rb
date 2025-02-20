@@ -2,11 +2,14 @@
 
 require_relative "unihan_lang/version"
 require_relative "unihan_lang/chinese_processor"
+require_relative "unihan_lang/variant_mapping"
+require_relative "unihan_lang/chinese_score_analyzer"
 
 module UnihanLang
   class Unihan
     def initialize
       @chinese_processor = ChineseProcessor.new
+      @variant_mapping = VariantMapping.new
     end
 
     def zh_tw?(text)
@@ -49,19 +52,25 @@ module UnihanLang
       end
     end
 
+    def analyze_with_variants(text)
+      analyzer = ChineseScoreAnalyzer.new(text, @chinese_processor, @variant_mapping)
+      {
+        traditional_score: analyzer.traditional_score,
+        simplified_score: analyzer.simplified_score,
+        total_chinese: analyzer.total_chinese,
+      }
+    end
+
+    def determine_language_with_variants(text)
+      analyzer = ChineseScoreAnalyzer.new(text, @chinese_processor, @variant_mapping)
+      analyzer.dominant_language
+    end
+
     private
 
-    # テキストの言語比率を計算し、最も可能性の高い言語を返す
     def language_ratio(text)
-      only_tw_chars = text.chars.count { |char| @chinese_processor.only_zh_tw?(char) }
-      only_cn_chars = text.chars.count { |char| @chinese_processor.only_zh_cn?(char) }
-      chinese_chars = text.chars.count { |char| @chinese_processor.chinese?(char) }
-
-      return :unknown unless chinese_chars == text.length
-      return :tw if only_tw_chars > only_cn_chars
-      return :cn if only_cn_chars >= only_tw_chars
-
-      :unknown
+      analyzer = ChineseScoreAnalyzer.new(text, @chinese_processor, @variant_mapping)
+      analyzer.language_ratio
     end
   end
 end
