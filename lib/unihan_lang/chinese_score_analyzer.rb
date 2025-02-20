@@ -14,10 +14,9 @@ module UnihanLang
     end
 
     def dominant_language
-      return "Unknown" if total_chinese.zero?
-      return "ZH_TW" if traditional_score > simplified_score
-      return "ZH_CN" if simplified_score > traditional_score
-
+      return "Unknown" if total_chinese == 0
+      return "zh_TW" if traditional_score > simplified_score
+      return "zh_CN" if simplified_score > traditional_score
       "Unknown"
     end
 
@@ -25,7 +24,6 @@ module UnihanLang
       return :unknown if total_chinese != @text.length
       return :tw if traditional_score > simplified_score
       return :cn if simplified_score >= traditional_score
-
       :unknown
     end
 
@@ -35,7 +33,6 @@ module UnihanLang
       @total_chinese = 0
       @text.chars.each do |char|
         next unless @chinese_processor.chinese_character?(char)
-
         @total_chinese += 1
 
         calculate_character_scores(char)

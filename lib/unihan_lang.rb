@@ -46,8 +46,8 @@ module UnihanLang
 
     def determine_language(text)
       case language_ratio(text)
-      when :tw then "ZH_TW"
-      when :cn then "ZH_CN"
+      when :tw then "zh_TW"
+      when :cn then "zh_CN"
       else "Unknown"
       end
     end
