@@ -183,4 +183,38 @@ RSpec.describe UnihanLang::Unihan do
       end
     end
   end
+
+  describe '#determine_language の実文への対応' do
+    it '句読点を含む繁体字の文章を正しく識別する' do
+      expect(unihan.determine_language('這是繁體中文。')).to eq('ZH_TW')
+    end
+
+    it '句読点を含む簡体字の文章を正しく識別する' do
+      expect(unihan.determine_language('这是简体中文！')).to eq('ZH_CN')
+    end
+
+    it '句読点のみで構成された共通漢字の文章は"Unknown"を返す' do
+      expect(unihan.determine_language('你好，世界。')).to eq('Unknown')
+    end
+  end
+
+  describe '日本語の誤判定防止' do
+    it 'ひらがなを含む日本語の文章を中国語と誤判定しない' do
+      expect(unihan.determine_language_with_variants('こんにちは、これは日本語です。')).to eq('Unknown')
+    end
+
+    it 'ひらがなを含む日本語の文章はzh_tw?でもfalseを返す' do
+      expect(unihan.zh_tw?('これは日本語です')).to be false
+    end
+  end
+
+  describe '繁体・簡体で共通する字のみのテキスト' do
+    it '繁体字と簡体字で同一の字のみの場合はzh_cn?でtrueを返さない' do
+      expect(unihan.zh_cn?('中文')).to be false
+    end
+
+    it '繁体字と簡体字で同一の字のみの場合はzh_tw?でtrueを返さない' do
+      expect(unihan.zh_tw?('中文')).to be false
+    end
+  end
 end

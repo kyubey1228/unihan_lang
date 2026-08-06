@@ -35,6 +35,11 @@ module UnihanLang
       chinese?(char)
     end
 
+    def kana?(char)
+      ord = char.ord
+      (ord >= 0x3040 && ord <= 0x309F) || (ord >= 0x30A0 && ord <= 0x30FF) || (ord >= 0x31F0 && ord <= 0x31FF)
+    end
+
     private
 
     def cjk?(char)

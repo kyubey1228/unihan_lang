@@ -10,10 +10,12 @@ module UnihanLang
       @variant_mapping = variant_mapping
       @traditional_score = 0
       @simplified_score = 0
+      @contains_kana = false
       analyze
     end
 
     def dominant_language
+      return "Unknown" if @contains_kana
       return "Unknown" if total_chinese.zero?
       return "ZH_TW" if traditional_score > simplified_score
       return "ZH_CN" if simplified_score > traditional_score
@@ -22,18 +24,27 @@ module UnihanLang
     end
 
     def language_ratio
-      return :unknown if total_chinese != @text.length
+      return :unknown if @contains_kana
+      return :unknown if total_chinese.zero? || total_chinese != meaningful_length
       return :tw if traditional_score > simplified_score
-      return :cn if simplified_score >= traditional_score
+      return :cn if simplified_score > traditional_score
 
       :unknown
     end
 
     private
 
+    # Punctuation, digits, and whitespace are ignored so they don't
+    # invalidate an otherwise all-Chinese sentence (e.g. "這是中文。").
+    def meaningful_length
+      @text.chars.count { |char| char.match?(/\p{L}/) }
+    end
+
     def analyze
       @total_chinese = 0
       @text.chars.each do |char|
+        @contains_kana ||= @chinese_processor.kana?(char)
+
         next unless @chinese_processor.chinese_character?(char)
 
         @total_chinese += 1
