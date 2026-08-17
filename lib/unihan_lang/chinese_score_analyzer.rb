@@ -15,7 +15,7 @@ module UnihanLang
     end
 
     def dominant_language
-      return "Unknown" if @contains_kana
+      return "Unknown" if contains_kana?
       return "Unknown" if total_chinese.zero?
       return "ZH_TW" if traditional_score > simplified_score
       return "ZH_CN" if simplified_score > traditional_score
@@ -24,7 +24,7 @@ module UnihanLang
     end
 
     def language_ratio
-      return :unknown if @contains_kana
+      return :unknown if contains_kana?
       return :unknown if total_chinese.zero? || total_chinese != meaningful_length
       return :tw if traditional_score > simplified_score
       return :cn if simplified_score > traditional_score
@@ -33,6 +33,16 @@ module UnihanLang
     end
 
     private
+
+    def contains_kana?
+      @contains_kana
+    end
+
+    def kana_char?(char)
+      ord = char.ord
+      # 0x3040-0x309F: ひらがな, 0x30A0-0x30FF: カタカナ, 0x31F0-0x31FF: カタカナ拡張
+      (ord >= 0x3040 && ord <= 0x309F) || (ord >= 0x30A0 && ord <= 0x30FF) || (ord >= 0x31F0 && ord <= 0x31FF)
+    end
 
     # Punctuation, digits, and whitespace are ignored so they don't
     # invalidate an otherwise all-Chinese sentence (e.g. "這是中文。").
@@ -43,7 +53,7 @@ module UnihanLang
     def analyze
       @total_chinese = 0
       @text.chars.each do |char|
-        @contains_kana ||= @chinese_processor.kana?(char)
+        @contains_kana ||= kana_char?(char)
 
         next unless @chinese_processor.chinese_character?(char)
 

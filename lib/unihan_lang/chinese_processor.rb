@@ -35,12 +35,6 @@ module UnihanLang
       chinese?(char)
     end
 
-    def kana?(char)
-      ord = char.ord
-      # 0x3040-0x309F: ひらがな, 0x30A0-0x30FF: カタカナ, 0x31F0-0x31FF: カタカナ拡張
-      (ord >= 0x3040 && ord <= 0x309F) || (ord >= 0x30A0 && ord <= 0x30FF) || (ord >= 0x31F0 && ord <= 0x31FF)
-    end
-
     private
 
     def cjk?(char)
