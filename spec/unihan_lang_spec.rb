@@ -193,8 +193,8 @@ RSpec.describe UnihanLang::Unihan do
       expect(unihan.determine_language('这是简体中文！')).to eq('ZH_CN')
     end
 
-    it '句読点のみで構成された共通漢字の文章は"Unknown"を返す' do
-      expect(unihan.determine_language('你好，世界。')).to eq('Unknown')
+    it '共通漢字と句読点(。、,)のみで構成された文章は"Unknown"を返す' do
+      expect(unihan.determine_language('你好，世界。你好、世界,')).to eq('Unknown')
     end
   end
 
