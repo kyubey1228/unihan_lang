@@ -206,6 +206,19 @@ RSpec.describe UnihanLang::Unihan do
     it 'ひらがなを含む日本語の文章はzh_tw?でもfalseを返す' do
       expect(unihan.zh_tw?('これは日本語です')).to be false
     end
+
+    it 'ひらがなのみの文章を中国語と誤判定しない' do
+      expect(unihan.determine_language_with_variants('すしねた')).to eq('Unknown')
+    end
+
+    it 'カタカナのみの文章を中国語と誤判定しない' do
+      expect(unihan.determine_language_with_variants('スシネタ')).to eq('Unknown')
+    end
+
+    it '漢字とかなが混在する文章を中国語と誤判定しない' do
+      expect(unihan.determine_language_with_variants('寿司ネタ')).to eq('Unknown')
+      expect(unihan.determine_language_with_variants('寿司ねた')).to eq('Unknown')
+    end
   end
 
   describe '繁体・簡体で共通する字のみのテキスト' do
