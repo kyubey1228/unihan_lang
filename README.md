@@ -71,7 +71,7 @@ puts unihan.contains_zh_cn?("這個text不包含簡體字") # => false
 
 ## Features
 
-- `determine_language(text)`: Determines the language of the text ("ZH_TW", "ZH_CN", "JA", "Unknown").
+- `determine_language(text)`: Determines the language of the text ("zh_TW", "zh_CN", "JA", "Unknown").
 - `zh_tw?(text)`: Checks if the text is in Traditional Chinese.
 - `zh_cn?(text)`: Checks if the text is in Simplified Chinese.
 - `contains_chinese?(text)`: Checks if the text contains Chinese characters.
@@ -86,3 +86,4 @@ puts unihan.contains_zh_cn?("這個text不包含簡體字") # => false
 This library does not guarantee 100% accuracy in language identification.
 Particularly for short texts or texts containing multiple languages, determination may be challenging.
 The distinction between Traditional and Simplified Chinese is based on the Unihan database.
+Punctuation, digits, and whitespace are ignored when judging a sentence, and text containing Hiragana/Katakana is treated as Japanese rather than Chinese.
